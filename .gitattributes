@@ -1,3 +1,4 @@
 *.nsi -linguist-detectable
 *.nsh -linguist-detectable
 frontend/wailsjs/** -linguist-detectable
+scripts/** -linguist-detectable
