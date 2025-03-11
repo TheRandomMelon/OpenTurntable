@@ -2,13 +2,19 @@ package main
 
 import (
 	"context"
+	"errors"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/gopxl/beep"
 	"github.com/gopxl/beep/effects"
+	"github.com/gopxl/beep/flac"
 	"github.com/gopxl/beep/mp3"
 	"github.com/gopxl/beep/speaker"
+	"github.com/gopxl/beep/vorbis"
+	"github.com/gopxl/beep/wav"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -64,18 +70,48 @@ func (a *App) PlayMusic() error {
 	if err != nil {
 		return err
 	}
-	streamer, format, err := mp3.Decode(f)
-	if err != nil {
-		return err
+
+	// Detect type of file and decode
+	ext := strings.ToLower(filepath.Ext(filePath))
+
+	var streamer beep.Streamer
+	var format beep.Format
+
+	switch ext {
+	case ".mp3":
+		streamer, format, err = mp3.Decode(f)
+		if err != nil {
+			return err
+		}
+	case ".flac":
+		streamer, format, err = flac.Decode(f)
+		if err != nil {
+			return err
+		}
+	case ".wav":
+		streamer, format, err = wav.Decode(f)
+		if err != nil {
+			return err
+		}
+	case ".ogg":
+		streamer, format, err = vorbis.Decode(f)
+		if err != nil {
+			return err
+		}
+	default:
+		return errors.New("unsupported_file_type")
 	}
+
 	a.ctrl = &beep.Ctrl{Streamer: streamer, Paused: false}
-	// Wrap the controller in a volume effect for dynamic volume control.
+
+	// Wraps the controller in a volume effect for dynamic volume control.
 	a.volume = &effects.Volume{
 		Streamer: a.ctrl,
 		Base:     2,
-		Volume:   0, // 0dB default volume
+		Volume:   0, // 0dB = default volume
 		Silent:   false,
 	}
+
 	speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
 	speaker.Play(a.volume)
 	return nil
