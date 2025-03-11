@@ -2,12 +2,21 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"os"
+	"time"
+
+	"github.com/gopxl/beep"
+	"github.com/gopxl/beep/effects"
+	"github.com/gopxl/beep/mp3"
+	"github.com/gopxl/beep/speaker"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx    context.Context
+	ctrl   *beep.Ctrl
+	volume *effects.Volume
 }
 
 // NewApp creates a new App application struct
@@ -38,7 +47,48 @@ func (a *App) shutdown(ctx context.Context) {
 	// Perform your teardown here
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) PlayMusic() error {
+	filePath, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
+		Filters: []runtime.FileFilter{
+			{
+				DisplayName: "Audio Files (*.mp3, *.wav, *.flac, *.ogg)",
+				Pattern:     "*.mp3;*.wav;*.flac;*.ogg",
+			},
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	f, err := os.Open(filePath)
+	if err != nil {
+		return err
+	}
+	streamer, format, err := mp3.Decode(f)
+	if err != nil {
+		return err
+	}
+	a.ctrl = &beep.Ctrl{Streamer: streamer, Paused: false}
+	// Wrap the controller in a volume effect for dynamic volume control.
+	a.volume = &effects.Volume{
+		Streamer: a.ctrl,
+		Base:     2,
+		Volume:   0, // 0dB default volume
+		Silent:   false,
+	}
+	speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
+	speaker.Play(a.volume)
+	return nil
+}
+
+func (a *App) PauseMusic() {
+	if a.ctrl != nil {
+		a.ctrl.Paused = !a.ctrl.Paused
+	}
+}
+
+func (a *App) SetVolume(vol float64) {
+	if a.volume != nil {
+		a.volume.Volume = vol // Adjust this value as needed.
+	}
 }

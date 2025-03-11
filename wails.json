@@ -9,5 +9,12 @@
   "author": {
     "name": "Michael Webb",
     "email": "michael@therandommelon.com"
+  },
+  "info": {
+    "companyName": "Michael Webb",
+    "productName": "OpenTurntable",
+    "productVersion": "0.0.1",
+    "copyright": "© Michael Webb, 2025",
+    "comments": "A (hopefully good) OSS music player"
   }
 }

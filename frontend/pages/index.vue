@@ -1,14 +1,43 @@
 <template>
     <MainBar />
-    <button @click="test()">Test</button>
+    <div class="flex space-x-2">
+        <button @click="initializeAudio" class="px-3 py-2 rounded bg-gray-800 cursor-pointer">Load Music</button>
+        <button @click="pause" class="px-3 py-2 rounded bg-gray-800 cursor-pointer">{{ state.isPlaying ? "Pause" : "Play" }}</button>
+        <input
+            type="range"
+            min="-10"
+            max="0"
+            step="0.01"
+            v-model="state.volume"
+            @input="updateVolume"
+        />
+    </div>
 </template>
 
 <script lang="ts" setup>
-    import { Greet } from '../wailsjs/go/main/App.js';
+    const state = reactive({
+        isPlaying: false,
+        volume: 0
+    });
 
-    const test = async() => {
-        Greet("Hello").then((thing) => {
-            console.log(thing);
-        })
+    import { PlayMusic, PauseMusic, SetVolume } from '../wailsjs/go/main/App.js';
+
+    const initializeAudio = async() => {
+        try {
+            await PlayMusic();
+            state.isPlaying = true;
+        } catch (err) {
+            console.error(err);
+        }
     }
+
+    const pause = async() => {
+        await PauseMusic();
+        state.isPlaying = !state.isPlaying;
+    }
+
+    const updateVolume = (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        SetVolume(parseFloat(target.value));
+    };
 </script>
