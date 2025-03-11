@@ -5,9 +5,9 @@
         <button @click="pause" class="px-3 py-2 rounded bg-gray-800 cursor-pointer">{{ state.isPlaying ? "Pause" : "Play" }}</button>
         <input
             type="range"
-            min="-10"
+            min="-5"
             max="0"
-            step="0.01"
+            step="0.1"
             v-model="state.volume"
             @input="updateVolume"
         />
@@ -38,6 +38,7 @@
 
     const updateVolume = (event: Event) => {
         const target = event.target as HTMLInputElement;
+        console.log(parseFloat(target.value));
         SetVolume(parseFloat(target.value));
     };
 </script>

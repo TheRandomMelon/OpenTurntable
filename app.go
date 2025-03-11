@@ -88,7 +88,10 @@ func (a *App) PauseMusic() {
 }
 
 func (a *App) SetVolume(vol float64) {
-	if a.volume != nil {
-		a.volume.Volume = vol // Adjust this value as needed.
+	if a.volume != nil && vol > -5 {
+		a.volume.Silent = false
+		a.volume.Volume = vol
+	} else if a.volume != nil {
+		a.volume.Silent = true
 	}
 }

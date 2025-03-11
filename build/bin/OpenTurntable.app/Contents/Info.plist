@@ -10,11 +10,11 @@
         <key>CFBundleIdentifier</key>
         <string>com.therandommelon.OpenTurntable</string>
         <key>CFBundleVersion</key>
-        <string>1.0.0</string>
+        <string>0.0.1</string>
         <key>CFBundleGetInfoString</key>
-        <string>Built using Wails (https://wails.io)</string>
+        <string>A (hopefully good) OSS music player</string>
         <key>CFBundleShortVersionString</key>
-        <string>1.0.0</string>
+        <string>0.0.1</string>
         <key>CFBundleIconFile</key>
         <string>iconfile</string>
         <key>LSMinimumSystemVersion</key>
@@ -22,7 +22,7 @@
         <key>NSHighResolutionCapable</key>
         <string>true</string>
         <key>NSHumanReadableCopyright</key>
-        <string>Copyright.........</string>
+        <string>© Michael Webb, 2025</string>
         
         
         <key>NSAppTransportSecurity</key>
