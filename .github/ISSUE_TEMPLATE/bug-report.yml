@@ -1,0 +1,40 @@
+name: "\U0001F41E Bug Report"
+description: Help us fix a bug in OpenTurntable.
+labels: ["bug", "pending review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report this bug!
+
+        Please review currently open issues first to ensure that this bug hasn't been reported yet:
+        https://github.com/TheRandomMelon/OpenTurntable/issues
+  - type: textarea
+    id: bug-env
+    attributes:
+      label: Environment
+      description: Describe the environment you're running OpenTurntable in, such as OpenTurntable version, OS/OS version, etc.
+      placeholder: Environment
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps for Reproduction
+      description: Please provide steps, in order, of how you can reliably reproduce this issue. If you cannot reliably reproduce this issue, it will be harder to fix the bug.
+      placeholder: Steps for Reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is and what it affects.
+      placeholder: Bug description
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: If applicable, add any other context about the problem here
