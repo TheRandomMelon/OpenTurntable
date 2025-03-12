@@ -1,6 +1,8 @@
-![Nuxt banner](./.github/assets/wordmark.png)
+
 <p align="center">
-A (hopefully good) OSS music player.
+    <img src="./.github/assets/wordmark.png" alt="OpenTurntable" style="width:50%; height:auto;">
+    <br/>
+    A (hopefully good) OSS music player.
 </p>
 
 ## Features
