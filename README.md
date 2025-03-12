@@ -11,4 +11,4 @@ directory and run `npm run dev`. The frontend dev server will run on http://loca
 browser and connect to your application.
 
 ## Building
-To build a redistributable, production mode package, use `wails build`.
+To build a redistributable, production mode package, use `wails build -tags "production"`.

@@ -6,6 +6,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   ssr: false,
+  imports: {
+    dirs: [
+      'wailsjs/runtime/**',
+    ],
+  },
   router: {
     options: {
       hashMode: true

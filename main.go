@@ -1,8 +1,9 @@
 package main
 
 import (
-	"embed"
+	_ "embed"
 	"log"
+	"openturntable/bundle"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
@@ -11,9 +12,6 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
-
-//go:embed all:frontend/.output/public
-var assets embed.FS
 
 //go:embed build/appicon.png
 var icon []byte
@@ -36,7 +34,7 @@ func main() {
 		HideWindowOnClose: false,
 		BackgroundColour:  &options.RGBA{R: 0, G: 0, B: 0, A: 255},
 		AssetServer: &assetserver.Options{
-			Assets: assets,
+			Assets: bundle.Bundle,
 		},
 		Menu:             nil,
 		Logger:           nil,

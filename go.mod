@@ -1,4 +1,4 @@
-module OpenTurntable
+module openturntable
 
 go 1.23.2
 
