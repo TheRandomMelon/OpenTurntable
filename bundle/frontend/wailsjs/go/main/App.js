@@ -26,16 +26,12 @@ export function PauseMusic() {
   return window['go']['main']['App']['PauseMusic']();
 }
 
-export function PlayMusic() {
-  return window['go']['main']['App']['PlayMusic']();
-}
-
-export function ReadMetadata(arg1) {
-  return window['go']['main']['App']['ReadMetadata'](arg1);
-}
-
 export function Seek(arg1) {
   return window['go']['main']['App']['Seek'](arg1);
+}
+
+export function SelectAndPlayFile() {
+  return window['go']['main']['App']['SelectAndPlayFile']();
 }
 
 export function SetVolume(arg1) {
