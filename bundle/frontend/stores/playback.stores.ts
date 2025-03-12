@@ -77,8 +77,12 @@ export const usePlaybackStore = defineStore("playback", {
         },
 
         setVolume(volume: number) {
-            SetVolume(volume);
+            if (typeof volume === "string") {
+                volume = parseFloat(volume);
+            }
+            
             this.volume = volume;
+            SetVolume(volume);
         },
 
         toggleMute() {
