@@ -5,7 +5,7 @@
         </div>
         <div class="flex ml-2 flex-col">
             <span class="font-bold">{{ playback.metadata ? playback.metadata.title : "Unknown Title" }}</span>
-            <span class="">{{ playback.metadata ? playback.metadata.artist : "Unknown Artist" }}</span>
+            <span class="">{{ playback.metadata?.artist ? playback.metadata.artist : "Unknown Artist" }}</span>
         </div>
         <div class="flex-grow"></div>
         <div class="flex flex-col space-y-2 justify-center items-center">

@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -81,11 +82,13 @@ func (a *App) PlayMusic() error {
 		return err
 	}
 
-	metadata, err := a.ReadMetadata(f)
+	metadata := a.ReadMetadata(f)
+	a.metadata = metadata
+
+	// Ensure file pointer is reset to beginning before decoding
+	_, err = f.Seek(0, io.SeekStart)
 	if err != nil {
-		fmt.Println(err)
-	} else {
-		a.metadata = metadata
+		return fmt.Errorf("failed to reset file pointer: %w", err)
 	}
 
 	// Detect type of file and decode
@@ -214,16 +217,25 @@ func (a *App) GetFilePath() string {
 	return a.filePath
 }
 
-func (a *App) ReadMetadata(fileBase *os.File) (map[string]string, error) {
+func (a *App) ReadMetadata(fileBase *os.File) map[string]string {
 	metadata := make(map[string]string)
 
 	// Read tags from file
 	file, err := tag.ReadFrom(fileBase)
 	if err != nil {
-		return metadata, err
+		fmt.Println("Error reading metadata:", err)
+
+		// Fallback to default values on error
+		metadata["title"] = filepath.Base(fileBase.Name())
+		metadata["artist"] = ""
+		metadata["album"] = ""
+		metadata["genre"] = ""
+		metadata["year"] = "0"
+
+		return metadata
 	}
 
-	// Basic metadata
+	// If no error, populate metadata from the file
 	metadata["title"] = file.Title()
 	metadata["artist"] = file.Artist()
 	metadata["album"] = file.Album()
@@ -239,7 +251,7 @@ func (a *App) ReadMetadata(fileBase *os.File) (map[string]string, error) {
 		metadata["albumArt"] = dataURL
 	}
 
-	return metadata, nil
+	return metadata
 }
 
 func (a *App) GetMetadata() map[string]string {
