@@ -5,6 +5,7 @@ go 1.23.2
 toolchain go1.24.1
 
 require (
+	github.com/dhowden/tag v0.0.0-20240417053706-3d75831295e8
 	github.com/gopxl/beep v1.4.1
 	github.com/wailsapp/wails/v2 v2.10.1
 )

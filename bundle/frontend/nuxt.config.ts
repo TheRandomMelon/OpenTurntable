@@ -11,6 +11,13 @@ export default defineNuxtConfig({
       'wailsjs/runtime/**',
     ],
   },
+  modules: [
+    '@vesp/nuxt-fontawesome',
+    '@pinia/nuxt'
+  ],
+	pinia: {
+		storesDirs: ['./stores/**'],
+	},
   router: {
     options: {
       hashMode: true
@@ -23,13 +30,19 @@ export default defineNuxtConfig({
     ],
   },
 
-  modules: ['@vesp/nuxt-fontawesome'],
   fontawesome: {
     icons: {
-      solid: ["file-audio", "book", "circle-play", "bars"],
+      solid: ["file-audio", "book", "circle-play", "circle-pause", "bars", "volume-xmark", "volume-off", "volume-low", "volume-high"],
       regular: [],
 			brands: []
     },
     component: 'fa',
+  },
+
+  app: {
+		head: {
+			charset: "utf-8",
+			viewport: "width=device-width, initial-scale=1",
+    }
   }
 })
