@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center w-full shadow-lg space-x-2 p-2" style="background: #252525;">
 		<div>
-            <img class="w-[64px] shadow rounded" :src="playback.metadata?.albumArt ? playback.metadata.albumArt : defaultArtwork" />
+            <img class="w-[64px] shadow rounded" draggable="false" :src="playback.metadata?.albumArt ? playback.metadata.albumArt : defaultArtwork" />
         </div>
         <div class="flex ml-2 flex-col">
             <span class="font-bold">{{ playback.metadata ? playback.metadata.title : "Unknown Title" }}</span>
