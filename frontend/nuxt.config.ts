@@ -6,6 +6,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   ssr: false,
+  router: {
+    options: {
+      hashMode: true
+    }
+  },
 
   vite: {
     plugins: [

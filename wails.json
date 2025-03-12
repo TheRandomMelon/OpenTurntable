@@ -4,7 +4,7 @@
   "outputfilename": "OpenTurntable",
   "assetdir": "frontend/.output/public",
   "frontend:install": "npm install",
-  "frontend:build": "./proper-build.sh",
+  "frontend:build": "npm run generate",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "author": {
