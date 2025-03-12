@@ -258,6 +258,9 @@ func (a *App) ReadMetadata(fileBase *os.File) map[string]string {
 		metadata["title"] = filepath.Base(fileBase.Name())
 		metadata["artist"] = ""
 		metadata["album"] = ""
+		metadata["albumartist"] = ""
+		metadata["composer"] = ""
+		metadata["comment"] = ""
 		metadata["genre"] = ""
 		metadata["year"] = "0"
 
@@ -265,9 +268,20 @@ func (a *App) ReadMetadata(fileBase *os.File) map[string]string {
 	}
 
 	// If no error, populate metadata from the file
-	metadata["title"] = file.Title()
+
+	// Figure out title
+	tempTitle := file.Title()
+	if tempTitle == "" {
+		tempTitle = filepath.Base(fileBase.Name())
+	}
+
+	// Specify other pieces of metadata
+	metadata["title"] = tempTitle
 	metadata["artist"] = file.Artist()
 	metadata["album"] = file.Album()
+	metadata["albumartist"] = file.AlbumArtist()
+	metadata["composer"] = file.Composer()
+	metadata["comment"] = file.Comment()
 	metadata["genre"] = file.Genre()
 	metadata["year"] = fmt.Sprintf("%d", file.Year())
 

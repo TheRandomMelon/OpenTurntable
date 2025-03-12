@@ -1,15 +1,16 @@
 <template>
-    <div class="flex items-center w-full shadow-lg space-x-2 p-2" style="background: #252525;">
-		<div>
-            <img class="w-[64px] shadow rounded" draggable="false" :src="playback.metadata?.albumArt ? playback.metadata.albumArt : defaultArtwork" />
+    <div class="flex items-center justify-center w-full shadow-lg space-x-2 p-2" style="background: #252525;">
+        <div class="flex w-1/3 max-w-1/3 items-center">
+            <div class="w-[64px] min-w-[64px]">
+                <img class="w-[64px] shadow rounded" draggable="false" :src="playback.metadata?.albumArt ? playback.metadata.albumArt : defaultArtwork" />
+            </div>
+            <div class="flex ml-4 flex-col flex-1 overflow-hidden mr-4">
+                <span class="font-bold truncate">{{ playback.metadata?.title ? playback.metadata.title : "Unknown Title" }}</span>
+                <span class="truncate">{{ playback.metadata?.artist ? playback.metadata.artist : "Unknown Artist" }}</span>
+            </div>
         </div>
-        <div class="flex ml-2 flex-col">
-            <span class="font-bold">{{ playback.metadata ? playback.metadata.title : "Unknown Title" }}</span>
-            <span class="">{{ playback.metadata?.artist ? playback.metadata.artist : "Unknown Artist" }}</span>
-        </div>
-        <div class="flex-grow"></div>
-        <div class="flex flex-col space-y-2 justify-center items-center">
-            <div class="flex space-x-4">
+        <div class="flex flex-col space-y-2 justify-center items-center w-1/3 max-w-1/3">
+            <div class="flex space-x-4 w-full">
                 <span>{{ playback.position ? SecondsToDuration(playback.position) : "0:00" }}</span>
                 <input
                     type="range"
@@ -18,7 +19,7 @@
                     step="0.1"
                     v-model="playback.position"
                     @input="playback.changePosition"
-                    class="cursor-pointer w-64"
+                    class="cursor-pointer w-full"
                     :disabled="playback.duration ? false : true"
                 />
                 <span>{{ playback.duration ? SecondsToDuration(playback.duration) : "0:00" }}</span>
@@ -27,8 +28,7 @@
                 <fa :icon="playback.playing ? 'circle-pause' : 'circle-play'" class="text-white cursor-pointer text-3xl" @click="playback.togglePlayback()"></fa>
             </div>
         </div>
-        <div class="flex-grow"></div>
-        <div class="flex space-x-2">
+        <div class="flex space-x-2 w-1/3 max-w-1/3 justify-end mr-2">
             <fa icon="volume-high" class="text-[#767676] cursor-pointer" @click="playback.toggleMute()"></fa>
             <input
                 type="range"
