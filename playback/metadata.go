@@ -9,7 +9,7 @@ import (
 	"github.com/dhowden/tag"
 )
 
-func (p *Player) ReadMetadata(file *os.File) map[string]string {
+func ReadMetadata(file *os.File) map[string]string {
 	metadata := make(map[string]string)
 
 	tags, err := tag.ReadFrom(file)
@@ -21,7 +21,7 @@ func (p *Player) ReadMetadata(file *os.File) map[string]string {
 		metadata["composer"] = ""
 		metadata["comment"] = ""
 		metadata["genre"] = ""
-		metadata["year"] = "0"
+		metadata["year"] = ""
 		return metadata
 	}
 

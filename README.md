@@ -23,6 +23,12 @@
 
 ## Using the Source Code
 
+### C Bindings
+Some packages utilized in OpenTurntable require a C compiler such as GCC to be installed and in your environment variables for the app to work.
+
+On Windows, download [MSYS2](https://www.msys2.org), follow the initial installation instructions, and then add `C:\msys64\ucrt64\bin` to your PATH (assuming default install location).
+You also may or not need to run `go env -w CGO_ENABLED=1` to tell Go to enable CGO.
+
 ### Live Development
 To run in live development mode, run `wails dev` in the project directory.
 

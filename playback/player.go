@@ -53,7 +53,7 @@ func (p *Player) Play(filePath string) error {
 	p.metadata = nil
 
 	// Read metadata
-	metadata := p.ReadMetadata(f)
+	metadata := ReadMetadata(f)
 	p.metadata = metadata
 
 	// Reset file pointer
