@@ -1,18 +1,24 @@
 
 <p align="center">
-    <img src="./.github/assets/wordmark.png" alt="OpenTurntable" style="width:50%; height:auto;">
+    <img src="./.github/assets/wordmark.png" alt="OpenTurntable" style="width:50%; height:auto; margin-bottom: 10px;">
     <br/>
     A (hopefully good) OSS music player.
 </p>
+
+> [!WARNING] 
+> OpenTurntable is still incredibly early in development, and is not ready for
+> production at this time.
+> **Use at your own risk!**
 
 ## Features
 ### Current
 - Supports .mp3, .flac, .wav, and .ogg playback
 - Gathers metadata from files (title, artist, album art, etc)
 - Volume control
+- Library system to store a collection of music
 
 ### Planned
-- Library system to store a collection of music (see issue [#1](https://github.com/TheRandomMelon/OpenTurntable/issues/1))
+- Expanded library systems/screens (see issue [#8](https://github.com/TheRandomMelon/OpenTurntable/issues/8))
 - Playlist system (see issue [#2](https://github.com/TheRandomMelon/OpenTurntable/issues/2))
 - Last.fm scrobbling support (see issue [#4](https://github.com/TheRandomMelon/OpenTurntable/issues/4))
 - EQ (equalizer) (see issue [#5](https://github.com/TheRandomMelon/OpenTurntable/issues/5))
@@ -27,7 +33,9 @@
 Some packages utilized in OpenTurntable require a C compiler such as GCC to be installed and in your environment variables for the app to work.
 
 On Windows, download [MSYS2](https://www.msys2.org), follow the initial installation instructions, and then add `C:\msys64\ucrt64\bin` to your PATH (assuming default install location).
-You also may or not need to run `go env -w CGO_ENABLED=1` to tell Go to enable CGO.
+
+> [!NOTE]
+> You also may or not need to run `go env -w CGO_ENABLED=1` to tell Go to enable CGO.
 
 ### Live Development
 To run in live development mode, run `wails dev` in the project directory.
