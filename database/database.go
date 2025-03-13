@@ -127,6 +127,22 @@ func NewDB() (*DB, error) {
 		FOREIGN KEY (tag_id) REFERENCES tags(id),
 		FOREIGN KEY (song_id) REFERENCES songs(id)
 	);
+
+	CREATE TABLE IF NOT EXISTS playlists (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		name TEXT,
+		description TEXT,
+		picture TEXT
+	);
+
+	CREATE TABLE IF NOT EXISTS playlist_entries (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		playlist_id INTEGER,
+		song_id INTEGER,
+		list_order INTEGER,
+		FOREIGN KEY (playlist_id) REFERENCES playlists(id),
+		FOREIGN KEY (song_id) REFERENCES songs(id)
+	);
 	`
 
 	// If table creation fails
