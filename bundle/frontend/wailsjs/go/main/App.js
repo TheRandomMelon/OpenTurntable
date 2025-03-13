@@ -6,8 +6,8 @@ export function ChooseAndCreateSong() {
   return window['go']['main']['App']['ChooseAndCreateSong']();
 }
 
-export function CreateSong(arg1) {
-  return window['go']['main']['App']['CreateSong'](arg1);
+export function CreateSongFromFilePath(arg1) {
+  return window['go']['main']['App']['CreateSongFromFilePath'](arg1);
 }
 
 export function GetDuration() {
@@ -28,6 +28,10 @@ export function GetPosition() {
 
 export function GetSongs() {
   return window['go']['main']['App']['GetSongs']();
+}
+
+export function ImportSongsFromDirectory() {
+  return window['go']['main']['App']['ImportSongsFromDirectory']();
 }
 
 export function IsPlaying() {

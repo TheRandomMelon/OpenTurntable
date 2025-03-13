@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { GetDuration, GetPosition, PauseMusic, SelectAndPlayFile, SetVolume, GetFilePath, GetMetadata, IsPlaying, Seek, CreateSong, PlayFile } from "~/wailsjs/go/main/App";
+import { GetDuration, GetPosition, PauseMusic, SelectAndPlayFile, SetVolume, GetFilePath, GetMetadata, IsPlaying, Seek, PlayFile } from "~/wailsjs/go/main/App";
 import { database } from '~/wailsjs/go/models';
 
 export const usePlaybackStore = defineStore("playback", {

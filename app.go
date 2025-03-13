@@ -7,6 +7,8 @@ import (
 	"openturntable/database"
 	"openturntable/playback"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -131,20 +133,15 @@ func (a *App) GetMetadata() map[string]string {
 ///    DB BINDINGS
 /// =================
 
-// Binding to call CreateSong in db
-func (a *App) CreateSong(song database.Song) (int64, error) {
-	return a.db.CreateSong(song)
-}
-
 // Binding to call GetSongs in db
 func (a *App) GetSongs() ([]database.Song, error) {
 	return a.db.GetSongs()
 }
 
-// Inserts a new song into the database with file selection
-func (a *App) ChooseAndCreateSong() (int64, error) {
-	// Have user choose file
-	filePath, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
+// Inserts all songs in directory (recursive) from user provided directory
+func (a *App) ImportSongsFromDirectory() (string, error) {
+	// Have user choose directory
+	dirPath, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 		Filters: []runtime.FileFilter{
 			{
 				DisplayName: "Audio Files (*.mp3, *.wav, *.flac, *.ogg)",
@@ -153,9 +150,52 @@ func (a *App) ChooseAndCreateSong() (int64, error) {
 		},
 	})
 	if err != nil {
-		return -1, err
+		return "", err
 	}
 
+	runtime.EventsEmit(a.ctx, "toggleImporting")
+
+	allowed := map[string]bool{
+		".mp3":  true,
+		".flac": true,
+		".wav":  true,
+		".ogg":  true,
+	}
+
+	err = filepath.Walk(dirPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			fmt.Printf("Error accessing %s: %v\n", path, err)
+			return nil
+		}
+
+		// Skip directories
+		if info.IsDir() {
+			return nil
+		}
+
+		runtime.EventsEmit(a.ctx, "currentImportFileWorking", path)
+
+		// Check extension
+		ext := strings.ToLower(filepath.Ext(path))
+		if allowed[ext] {
+			a.CreateSongFromFilePath(path)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		fmt.Printf("Error walking directory: %v\n", err)
+		return "", nil
+	}
+
+	runtime.EventsEmit(a.ctx, "toggleImporting")
+
+	return dirPath, nil
+}
+
+// Inserts a new song into the database from file provided
+func (a *App) CreateSongFromFilePath(filePath string) (int64, error) {
 	// Check if file exists in the DB, and delete the old record if so
 	existingSong, err := a.db.GetSongByPath(filePath)
 	if err != nil {
@@ -250,4 +290,31 @@ func (a *App) ChooseAndCreateSong() (int64, error) {
 	}
 
 	return createSong, nil
+}
+
+// Inserts a new song into the database with file selection
+func (a *App) ChooseAndCreateSong() (int64, error) {
+	// Have user choose file
+	filePath, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
+		Filters: []runtime.FileFilter{
+			{
+				DisplayName: "Audio Files (*.mp3, *.wav, *.flac, *.ogg)",
+				Pattern:     "*.mp3;*.wav;*.flac;*.ogg",
+			},
+		},
+	})
+	if err != nil {
+		return -1, err
+	}
+
+	runtime.EventsEmit(a.ctx, "toggleImporting")
+
+	song, err := a.CreateSongFromFilePath(filePath)
+	if err != nil {
+		return -1, err
+	}
+
+	runtime.EventsEmit(a.ctx, "toggleImporting")
+
+	return song, nil
 }
