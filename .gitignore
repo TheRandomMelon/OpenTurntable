@@ -1,6 +1,9 @@
-# Ignore all files in the directory
+# Ignore all files in the build directory
 build/bin/*
 build/bin/OpenTurntable.app/*
 
-# Except the placeholder file (e.g., .gitkeep)
+# Exempt the placeholder file
 !build/bin/.gitkeep
+
+# Ignore app database
+app.db
