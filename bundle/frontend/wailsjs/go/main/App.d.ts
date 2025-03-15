@@ -16,6 +16,8 @@ export function GetPosition():Promise<number>;
 
 export function GetSongs():Promise<Array<database.Song>>;
 
+export function GetSongsWithDetails():Promise<Array<database.SongWithDetails>>;
+
 export function ImportSongsFromDirectory():Promise<string>;
 
 export function IsPlaying():Promise<boolean>;

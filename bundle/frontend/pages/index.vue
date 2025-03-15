@@ -15,8 +15,8 @@
                                 <th>ID</th>
                                 <th>Path</th>
                                 <th>Title</th>
-                                <th>Artist ID</th>
-                                <th>Album ID</th>
+                                <th>Artist</th>
+                                <th>Album</th>
                                 <th>Comment</th>
                                 <th>Genre</th>
                                 <th>Year</th>
@@ -28,11 +28,11 @@
                                 <td>{{ song.ID }}</td>
                                 <td>{{ song.Path }}</td>
                                 <td>{{ song.Title }}</td>
-                                <td>{{ song.Artist_ID }}</td>
-                                <td>{{ song.Album_ID }}</td>
-                                <td>{{ song.Comment }}</td>
-                                <td>{{ song.Genre }}</td>
-                                <td>{{ song.Year }}</td>
+                                <td>{{ song.ArtistName.String }}</td>
+                                <td>{{ song.AlbumName.String }}</td>
+                                <td>{{ song.Comment.String }}</td>
+                                <td>{{ song.Genre.String }}</td>
+                                <td>{{ song.Year.String == "0" ? "" : song.Year.String }}</td>
                             </tr>
                         </tbody>
                     </table>

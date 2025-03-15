@@ -19,12 +19,12 @@ type Song struct {
 	ID        int64
 	Path      string
 	Title     string
-	Artist_ID int64
-	Album_ID  int64
-	Composer  string
-	Comment   string
-	Genre     string
-	Year      string
+	Artist_ID sql.NullInt64
+	Album_ID  sql.NullInt64
+	Composer  sql.NullString
+	Comment   sql.NullString
+	Genre     sql.NullString
+	Year      sql.NullString
 }
 
 // Represents an artist in the database
@@ -40,6 +40,15 @@ type Album struct {
 	Name      string
 	Art       string
 	Artist_ID int64
+}
+
+// Represents a song with album/artist name and details
+type SongWithDetails struct {
+	Song
+	ArtistName sql.NullString
+	ArtistPFP  sql.NullString
+	AlbumName  sql.NullString
+	AlbumArt   sql.NullString
 }
 
 // Gather where the database should be
@@ -305,4 +314,57 @@ func (db *DB) GetSongs() ([]Song, error) {
 func (db *DB) DeleteSong(id int64) error {
 	_, err := db.conn.Exec("DELETE FROM songs WHERE id = ?", id)
 	return err
+}
+
+// Retrieves a song with details (album name/art, artist name/pfp)
+func (db *DB) GetSongsWithDetails() ([]SongWithDetails, error) {
+	query := `
+        SELECT 
+            songs.id,
+            songs.path,
+            songs.title,
+            songs.artist_id,
+            songs.album_id,
+            songs.composer,
+            songs.comment,
+            songs.genre,
+            songs.year,
+            COALESCE(artists.name, '') AS artist_name,
+            COALESCE(artists.pfp, '') AS artist_pfp,
+            COALESCE(albums.name, '') AS album_name,
+            COALESCE(albums.art, '') AS album_art
+        FROM songs
+        LEFT JOIN artists ON songs.artist_id = artists.id
+        LEFT JOIN albums ON songs.album_id = albums.id
+    `
+	rows, err := db.conn.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get songs (w/ details): %w", err)
+	}
+	defer rows.Close()
+
+	var songs []SongWithDetails
+	for rows.Next() {
+		var s SongWithDetails
+		err := rows.Scan(
+			&s.ID,
+			&s.Path,
+			&s.Title,
+			&s.Artist_ID,
+			&s.Album_ID,
+			&s.Composer,
+			&s.Comment,
+			&s.Genre,
+			&s.Year,
+			&s.ArtistName,
+			&s.ArtistPFP,
+			&s.AlbumName,
+			&s.AlbumArt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan song details: %w", err)
+		}
+		songs = append(songs, s)
+	}
+	return songs, nil
 }

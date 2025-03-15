@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"openturntable/database"
@@ -138,6 +139,11 @@ func (a *App) GetSongs() ([]database.Song, error) {
 	return a.db.GetSongs()
 }
 
+// Binding to call GetSongsWithDetails in db
+func (a *App) GetSongsWithDetails() ([]database.SongWithDetails, error) {
+	return a.db.GetSongsWithDetails()
+}
+
 // Inserts all songs in directory (recursive) from user provided directory
 func (a *App) ImportSongsFromDirectory() (string, error) {
 	// Have user choose directory
@@ -267,21 +273,30 @@ func (a *App) CreateSongFromFilePath(filePath string) (int64, error) {
 
 	// Create song
 	song = database.Song{
-		Path:     filePath,
-		Title:    metadata["title"],
-		Composer: metadata["composer"],
-		Comment:  metadata["comment"],
-		Genre:    metadata["genre"],
-		Year:     metadata["year"],
+		Path:      filePath,
+		Title:     metadata["title"],
+		Artist_ID: sql.NullInt64{Int64: 0, Valid: false},
+		Album_ID:  sql.NullInt64{Int64: 0, Valid: false},
+		Composer:  sql.NullString{String: metadata["composer"], Valid: metadata["composer"] != ""},
+		Comment:   sql.NullString{String: metadata["comment"], Valid: metadata["comment"] != ""},
+		Genre:     sql.NullString{String: metadata["genre"], Valid: metadata["genre"] != ""},
+		Year:      sql.NullString{String: metadata["year"], Valid: metadata["year"] != ""},
 	}
 
-	// Check for invalid artist and album ID values
+	// Set artist ID if valid
 	if artist.ID != 0 {
-		song.Artist_ID = artist.ID
+		song.Artist_ID = sql.NullInt64{
+			Int64: artist.ID,
+			Valid: true,
+		}
 	}
 
+	// Set album ID if valid
 	if album.ID != 0 {
-		song.Album_ID = album.ID
+		song.Album_ID = sql.NullInt64{
+			Int64: album.ID,
+			Valid: true,
+		}
 	}
 
 	createSong, err := a.db.CreateSong(song)

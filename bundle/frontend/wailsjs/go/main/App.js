@@ -30,6 +30,10 @@ export function GetSongs() {
   return window['go']['main']['App']['GetSongs']();
 }
 
+export function GetSongsWithDetails() {
+  return window['go']['main']['App']['GetSongsWithDetails']();
+}
+
 export function ImportSongsFromDirectory() {
   return window['go']['main']['App']['ImportSongsFromDirectory']();
 }

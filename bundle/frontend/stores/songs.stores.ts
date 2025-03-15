@@ -1,16 +1,16 @@
 import { defineStore } from "pinia";
-import { ChooseAndCreateSong, GetSongs, ImportSongsFromDirectory } from "~/wailsjs/go/main/App";
+import { ChooseAndCreateSong, GetSongs, ImportSongsFromDirectory, GetSongsWithDetails } from "~/wailsjs/go/main/App";
 import { database } from '~/wailsjs/go/models';
 
 export const useSongsStore = defineStore("songs", {
     state: () => ({
-        songs: null as database.Song[] | null,
+        songs: null as database.SongWithDetails[] | null,
         importing: false as boolean
     }),
     actions: {
         async getAllSongs() {
             try {
-                this.songs = await GetSongs();
+                this.songs = await GetSongsWithDetails();
             } catch (err) {
                 console.error(err);
             }
