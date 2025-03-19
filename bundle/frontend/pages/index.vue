@@ -11,7 +11,12 @@
                     <table class="w-full">
                         <thead>
                             <tr>
-                                <th class="play-btn"></th>
+                                <th class="play-btn" @click="rearrangeSongs('id')">
+                                    <div class="flex flex-row items-center space-x-2">
+                                        <span>#</span>
+                                        <SortIcon :ascending="songs.arrangement.asc" v-if="songs.arrangement.key === 'id'" />
+                                    </div>
+                                </th>
                                 <th class="cursor-pointer" @click="rearrangeSongs(state.sortTitle ? 'title' : 'artist')">
                                     <div class="flex flex-row items-center space-x-2">
                                         <span>{{ songs.arrangement.key === 'artist' ? 'Artist' : 'Title' }}</span>
@@ -40,7 +45,12 @@
                         </thead>
                         <tbody>
                             <tr v-for="song in songs.songs">
-                                <td class="play-btn"><fa icon="circle-play" class="text-white cursor-pointer text-xl" @click="playback.beginPlayback(song.Path)"></fa></td>
+                                <td class="play-btn">
+                                    <span class="id-label">{{ song.ID }}</span>
+                                    <div class="play-button-icon">
+                                        <fa icon="circle-play" class="text-white cursor-pointer text-xl" @click="playback.beginPlayback(song.Path)"></fa>
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="flex flex-row space-x-3 items-center">
                                         <div class="w-[42px] min-w-[42px]">
@@ -80,6 +90,22 @@ table th {
     position: sticky;
     top: 0;
     background: var(--component);
+}
+
+td .play-button-icon {
+    display: none;
+}
+
+td:hover .play-button-icon {
+    display: initial;
+}
+
+td .id-label {
+    display: initial;
+}
+
+td:hover .id-label {
+    display: none;
 }
 </style>
 
