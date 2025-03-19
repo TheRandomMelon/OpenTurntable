@@ -32,7 +32,7 @@ export default defineNuxtConfig({
 
   fontawesome: {
     icons: {
-      solid: ["file-audio", "book", "circle-play", "circle-pause", "bars", "volume-xmark", "volume-off", "volume-low", "volume-high"],
+      solid: ["file-audio", "book", "circle-play", "circle-pause", "bars", "volume-xmark", "volume-off", "volume-low", "volume-high", "caret-up", "caret-down"],
       regular: [],
 			brands: []
     },
