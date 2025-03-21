@@ -110,9 +110,23 @@ func (a *App) Seek(seconds float64) error {
 	return a.player.Seek(seconds)
 }
 
-// Binding to call GetPosition in player
+// Binding to call GetPosition in player, alongside event handling
 func (a *App) GetPosition() (float64, error) {
-	return a.player.GetPosition()
+	position, err := a.player.GetPosition()
+	if err != nil {
+		return 0, err
+	}
+
+	duration, err2 := a.GetDuration()
+	if err2 != nil {
+		return 0, err
+	}
+
+	if position >= duration {
+		runtime.EventsEmit(a.ctx, "playbackComplete")
+	}
+
+	return position, err
 }
 
 // Binding to call GetDuration in player

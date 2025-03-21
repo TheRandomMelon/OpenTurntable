@@ -113,7 +113,7 @@ td:hover .id-label {
     import { database } from '~/wailsjs/go/models';
     import { EventsOn } from '~/wailsjs/runtime';
     import defaultArtwork from '@/assets/img/default_artwork.png';
-import { PlaybackSourceType } from '~/stores/playback.stores';
+    import { PlaybackSourceType } from '~/stores/playback.stores';
 
     const playback = usePlaybackStore();
     const songs = useSongsStore();
@@ -134,6 +134,10 @@ import { PlaybackSourceType } from '~/stores/playback.stores';
         
         EventsOn("currentImportFileWorking", async (path: string) => {
 			state.currentlyImporting = path;
+		});
+        
+        EventsOn("playbackComplete", async () => {
+			playback.queueStep(true);
 		});
     });
 

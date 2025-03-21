@@ -145,9 +145,12 @@ func (p *Player) GetPosition() (float64, error) {
 		return 0, errors.New("no active stream")
 	}
 
+	// Get usable position based on sample rate
+	position := float64(p.streamer.Position()) / float64(p.format.SampleRate)
+
 	speaker.Lock()
 	defer speaker.Unlock()
-	return float64(p.streamer.Position()) / float64(p.format.SampleRate), nil
+	return position, nil
 }
 
 func (p *Player) GetDuration() (float64, error) {
