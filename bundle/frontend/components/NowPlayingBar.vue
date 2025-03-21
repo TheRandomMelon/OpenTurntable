@@ -20,7 +20,7 @@
         </div>
         
         <!-- Middle (playback controls) -->
-        <div class="flex flex-col space-y-2 justify-center items-center w-1/3 max-w-1/3">
+        <div class="flex flex-col space-y-1 justify-center items-center w-1/3 max-w-1/3">
             <div class="flex space-x-4 w-full">
                 <span>{{ playback.position ? SecondsToDuration(playback.position) : "0:00" }}</span>
                 <input
@@ -35,14 +35,16 @@
                 />
                 <span>{{ playback.duration ? SecondsToDuration(playback.duration) : "0:00" }}</span>
             </div>
-            <div>
+            <div class="flex items-center space-x-6">
+                <fa icon="backward-step" class="text-[#bbb] cursor-pointer text-xl" @click="playback.queueStep(false)"></fa>
                 <fa :icon="playback.playing ? 'circle-pause' : 'circle-play'" class="text-white cursor-pointer text-3xl" @click="playback.togglePlayback()"></fa>
+                <fa icon="forward-step" class="text-[#bbb] cursor-pointer text-xl" @click="playback.queueStep(true)"></fa>
             </div>
         </div>
 
         <!-- End (volume/misc controls) -->
         <div class="flex space-x-2 w-1/3 max-w-1/3 justify-end mr-2">
-            <fa icon="volume-high" class="text-[#767676] cursor-pointer" @click="playback.toggleMute()"></fa>
+            <fa icon="volume-high" class="text-[#bbb] cursor-pointer" @click="playback.toggleMute()"></fa>
             <input
                 type="range"
                 min="-5"

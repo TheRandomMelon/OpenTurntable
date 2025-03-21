@@ -11,7 +11,7 @@
                     <table class="w-full">
                         <thead>
                             <tr>
-                                <th class="play-btn" @click="rearrangeSongs('id')">
+                                <th class="cursor-pointer" @click="rearrangeSongs('id')">
                                     <div class="flex flex-row items-center space-x-2">
                                         <span>#</span>
                                         <SortIcon :ascending="songs.arrangement.asc" v-if="songs.arrangement.key === 'id'" />
@@ -48,7 +48,7 @@
                                 <td class="play-btn">
                                     <span class="id-label">{{ song.ID }}</span>
                                     <div class="play-button-icon">
-                                        <fa icon="circle-play" class="text-white cursor-pointer text-xl" @click="playback.beginPlayback(song.Path)"></fa>
+                                        <fa icon="circle-play" class="text-white cursor-pointer text-xl" @click="playback.beginPlayback(song, PlaybackSourceType.Library)"></fa>
                                     </div>
                                 </td>
                                 <td>
@@ -113,6 +113,7 @@ td:hover .id-label {
     import { database } from '~/wailsjs/go/models';
     import { EventsOn } from '~/wailsjs/runtime';
     import defaultArtwork from '@/assets/img/default_artwork.png';
+import { PlaybackSourceType } from '~/stores/playback.stores';
 
     const playback = usePlaybackStore();
     const songs = useSongsStore();

@@ -87,6 +87,10 @@ export const useSongsStore = defineStore("songs", {
                         this.arrangement.asc = true;
                     }
                     break;
+                case "id":
+                    this.arrangement.key = 'id';
+                    this.arrangement.asc = !this.arrangement.asc;
+                    break;
                 default:
                     this.arrangement.key = "id";
                     this.arrangement.asc = true;
@@ -116,6 +120,13 @@ export const useSongsStore = defineStore("songs", {
             }
 
             return this.arrangement;
+        },
+
+        getQueue<T>(arr: T[], startIndex: number): T[] {
+            if (arr.length === 0) return [];
+            const adjustedIndex = startIndex % arr.length;
+            const safeIndex = adjustedIndex >= 0 ? adjustedIndex : adjustedIndex + arr.length;
+            return [...arr.slice(safeIndex), ...arr.slice(0, safeIndex)];
         }
     }
 })
