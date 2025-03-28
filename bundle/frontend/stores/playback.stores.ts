@@ -1,10 +1,16 @@
 import { defineStore } from "pinia";
-import { GetDuration, GetPosition, PauseMusic, SelectAndPlayFile, SetVolume, GetFilePath, GetMetadata, IsPlaying, Seek, PlayFile } from "~/wailsjs/go/main/App";
+import { GetDuration, GetPosition, PauseMusic, StopPlayback, SetVolume, GetFilePath, GetMetadata, IsPlaying, Seek, PlayFile } from "~/wailsjs/go/main/App";
 import { database } from '~/wailsjs/go/models';
 
 export enum PlaybackSourceType {
     Library,
     Playlist
+}
+
+export enum RepeatType {
+    Off,
+    Repeat,
+    RepeatOne
 }
 
 export const usePlaybackStore = defineStore("playback", {
@@ -21,7 +27,10 @@ export const usePlaybackStore = defineStore("playback", {
             type: null as PlaybackSourceType | null,
             id: null as number | null
         },
-        queue: null as database.SongWithDetails[] | null
+        queue: null as database.SongWithDetails[] | null,
+        unshuffledQueue: null as database.SongWithDetails[] | null,
+        repeat: RepeatType.Off as RepeatType,
+        shuffle: false as boolean
     }),
     actions: {
         async beginPlayback(song: database.SongWithDetails, source: PlaybackSourceType) {
@@ -37,7 +46,14 @@ export const usePlaybackStore = defineStore("playback", {
                         let pos = songs.songs?.findIndex((s) => s.ID === song.ID)
 
                         // Get new queue
-                        this.queue = songs.getQueue<database.SongWithDetails>(songs.songs ? songs.songs : [], pos ? pos : song.ID);
+                        this.queue = songs.getQueue<database.SongWithDetails>(songs.songs ? songs.songs : [], pos ? pos : song.ID, false);
+                        this.unshuffledQueue = this.queue;
+
+                        if (this.shuffle) {
+                            this.queue = songs.getQueue<database.SongWithDetails>(songs.songs ? songs.songs : [], pos ? pos : song.ID, true);
+                        }
+
+                        console.log(this.queue);
 
                         // Begin playback of file
                         await this.playFile(song);
@@ -64,11 +80,28 @@ export const usePlaybackStore = defineStore("playback", {
             this.playing = true;
         },
 
-        async queueStep(forward: boolean) {
+        async queueStep(forward: boolean, userClick: boolean = false) {
             if (forward && this.queue) {
                 let currentPos = this.queue.findIndex((s) => s.ID === this.currentSong?.ID);
                 let newPos = currentPos ? currentPos + 1 : 1;
-                let newSong = this.queue[newPos];
+                let newSong;
+
+                if (this.repeat === RepeatType.RepeatOne && !userClick) {
+                    newSong = this.queue[currentPos];
+                } else {
+                    newSong = this.queue[newPos];
+                    if (this.repeat === RepeatType.RepeatOne) {
+                        this.repeat = RepeatType.Repeat;
+                    }
+                }
+
+                if (!newSong && this.repeat !== RepeatType.Repeat) {
+                    // Clear everything out, queue is done
+                    await this.stopPlayback();
+                } else if (!newSong && this.repeat === RepeatType.Repeat) {
+                    // Loop back to first position in queue
+                    newSong = this.queue[0];
+                }
 
                 await this.playFile(newSong);
             } else if (!forward && this.queue) {
@@ -76,9 +109,32 @@ export const usePlaybackStore = defineStore("playback", {
                 let newPos = currentPos ? currentPos - 1 : 0;
                 let newSong = this.queue[newPos];
 
+                if (!newSong) newSong = this.queue[currentPos];
+
+                if (this.repeat === RepeatType.RepeatOne) {
+                    this.repeat = RepeatType.Repeat;
+                }
+
                 await this.playFile(newSong);
             } else {
                 console.log("No queue exists");
+            }
+        },
+
+        async cycleRepeat() {
+            switch (this.repeat) {
+                case RepeatType.Off:
+                    this.repeat = RepeatType.Repeat;
+                    break;
+                case RepeatType.Repeat:
+                    this.repeat = RepeatType.RepeatOne;
+                    break;
+                case RepeatType.RepeatOne:
+                    this.repeat = RepeatType.Off;
+                    break;
+                default:
+                    this.repeat = RepeatType.Off;
+                    break;
             }
         },
 
@@ -125,6 +181,42 @@ export const usePlaybackStore = defineStore("playback", {
             
             await Seek(newPos);
             this.position = await this.getPosition();
+        },
+
+        async stopPlayback() {
+            await StopPlayback();
+            this.currentSong = null;
+            this.playing = false;
+            this.queue = null;
+            this.source = {
+                type: null,
+                id: null
+            };
+            this.filePath = null;
+            this.duration = null;
+            this.position = null;
+            this.metadata = null;
+            this.repeat = RepeatType.Off;
+        },
+        
+        async toggleShuffle() {
+            const songs = useSongsStore();
+
+            if (this.shuffle) {
+                this.shuffle = false;
+                if (this.queue && this.currentSong && this.unshuffledQueue) {
+                    // Get new queue
+                    this.queue = songs.getQueue<database.SongWithDetails>(this.unshuffledQueue, this.currentSong.ID, false);
+                    console.log(this.queue);
+                }
+            } else {
+                this.shuffle = true;
+                if (this.queue && this.currentSong) {
+                    // Get new queue
+                    this.queue = songs.getQueue<database.SongWithDetails>(this.queue, this.currentSong.ID, true);
+                    console.log(this.queue);
+                }
+            }
         },
 
         updateVolume(event: Event) {

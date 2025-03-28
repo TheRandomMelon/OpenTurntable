@@ -31,3 +31,5 @@ export function Seek(arg1:number):Promise<void>;
 export function SelectAndPlayFile():Promise<void>;
 
 export function SetVolume(arg1:number):Promise<void>;
+
+export function StopPlayback():Promise<void>;

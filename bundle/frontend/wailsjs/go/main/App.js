@@ -61,3 +61,7 @@ export function SelectAndPlayFile() {
 export function SetVolume(arg1) {
   return window['go']['main']['App']['SetVolume'](arg1);
 }
+
+export function StopPlayback() {
+  return window['go']['main']['App']['StopPlayback']();
+}

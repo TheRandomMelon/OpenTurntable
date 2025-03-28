@@ -122,11 +122,27 @@ export const useSongsStore = defineStore("songs", {
             return this.arrangement;
         },
 
-        getQueue<T>(arr: T[], startIndex: number): T[] {
+        getQueue<T>(arr: T[], startIndex: number, shuffle: boolean = false): T[] {
             if (arr.length === 0) return [];
-            const adjustedIndex = startIndex % arr.length;
+            const adjustedIndex = (startIndex - 1) % arr.length;
             const safeIndex = adjustedIndex >= 0 ? adjustedIndex : adjustedIndex + arr.length;
-            return [...arr.slice(safeIndex), ...arr.slice(0, safeIndex)];
+            let queue = [...arr.slice(safeIndex), ...arr.slice(0, safeIndex)];
+
+            if (shuffle) {
+                const [first, ...rest] = queue;
+                queue = [first, ...this.shuffleQueue(rest)];
+            }
+
+            return queue;
+        },
+
+        shuffleQueue<T>(array: T[]): T[] {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
         }
     }
 })

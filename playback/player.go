@@ -170,3 +170,20 @@ func (p *Player) GetFilePath() string {
 func (p *Player) GetMetadata() map[string]string {
 	return p.metadata
 }
+
+func (p *Player) StopPlayback() {
+	// Close previous streamer if exists
+	if p.streamer != nil {
+		p.streamer.Close()
+		p.streamer = nil
+	}
+
+	// Stop any current playback
+	speaker.Clear()
+
+	// Reset structures
+	p.ctrl = nil
+	p.volume = nil
+	p.filePath = ""
+	p.metadata = nil
+}

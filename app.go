@@ -144,6 +144,11 @@ func (a *App) GetMetadata() map[string]string {
 	return a.player.GetMetadata()
 }
 
+// Binding to call StopPlayback in player
+func (a *App) StopPlayback() {
+	a.player.StopPlayback()
+}
+
 /// =================
 ///    DB BINDINGS
 /// =================
