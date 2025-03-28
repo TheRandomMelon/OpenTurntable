@@ -24,11 +24,13 @@ export function IsPlaying():Promise<boolean>;
 
 export function PauseMusic():Promise<void>;
 
-export function PlayFile(arg1:string):Promise<void>;
+export function PlayFile(arg1:string,arg2:number):Promise<void>;
 
 export function Seek(arg1:number):Promise<void>;
 
 export function SelectAndPlayFile():Promise<void>;
+
+export function SetSpeed(arg1:number):Promise<void>;
 
 export function SetVolume(arg1:number):Promise<void>;
 

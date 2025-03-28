@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center justify-center w-full shadow-lg space-x-2 p-2" style="background: #252525;">
+    <div class="flex items-center justify-center w-full shadow-lg space-x-2 p-2 bg-[#252525]">
         <!-- Left hand side (track info) -->
         <div class="flex w-1/3 max-w-1/3 items-center" v-if="playback.filePath">
             <div class="w-[64px] min-w-[64px]">
@@ -48,7 +48,22 @@
         </div>
 
         <!-- End (volume/misc controls) -->
-        <div class="flex space-x-2 w-1/3 max-w-1/3 justify-end mr-2">
+        <div class="flex items-center space-x-3 w-1/3 max-w-1/3 justify-end mr-2">
+            <div class="relative">
+                <fa icon="gauge" class="text-[#bbb] cursor-pointer" @click="state.speedDropdown = !state.speedDropdown"></fa>
+
+                <div class="absolute bottom-full mb-2 bg-[#333] shadow-lg rounded-md p-2 w-24" v-if="state.speedDropdown">
+                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(0.25)">0.25x</div>
+                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(0.5)">0.5x</div>
+                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(0.75)">0.75x</div>
+                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(1)">1x</div>
+                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(1.25)">1.25x</div>
+                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(1.5)">1.5x</div>
+                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(1.75)">1.75x</div>
+                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(2)">2x</div>
+                </div>
+            </div>
+
             <fa icon="volume-high" class="text-[#bbb] cursor-pointer" @click="playback.toggleMute()"></fa>
             <input
                 type="range"
@@ -68,6 +83,15 @@
     import defaultArtwork from '@/assets/img/default_artwork.png';
     import { RepeatType } from '~/stores/playback.stores';
     import { SecondsToDuration } from '~/utils/format';
+
+    const state = reactive({
+        speedDropdown: false
+    });
+
+    const changeSpeed = async (speed: number) => {
+        state.speedDropdown = false;
+        await playback.setSpeed(speed);
+    }
     
     setInterval(async () => {
         if (playback.playing) {

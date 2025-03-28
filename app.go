@@ -83,11 +83,11 @@ func (a *App) SelectAndPlayFile() error {
 	if err != nil {
 		return err
 	}
-	return a.player.Play(filePath)
+	return a.player.Play(filePath, 1.0)
 }
 
-func (a *App) PlayFile(filePath string) error {
-	return a.player.Play(filePath)
+func (a *App) PlayFile(filePath string, speed float64) error {
+	return a.player.Play(filePath, speed)
 }
 
 // Binding to call  pause function in player
@@ -147,6 +147,11 @@ func (a *App) GetMetadata() map[string]string {
 // Binding to call StopPlayback in player
 func (a *App) StopPlayback() {
 	a.player.StopPlayback()
+}
+
+// Binding to call SetSpeed in player
+func (a *App) SetSpeed(speed float64) {
+	a.player.SetSpeed(speed)
 }
 
 /// =================

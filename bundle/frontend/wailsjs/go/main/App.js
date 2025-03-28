@@ -46,8 +46,8 @@ export function PauseMusic() {
   return window['go']['main']['App']['PauseMusic']();
 }
 
-export function PlayFile(arg1) {
-  return window['go']['main']['App']['PlayFile'](arg1);
+export function PlayFile(arg1, arg2) {
+  return window['go']['main']['App']['PlayFile'](arg1, arg2);
 }
 
 export function Seek(arg1) {
@@ -56,6 +56,10 @@ export function Seek(arg1) {
 
 export function SelectAndPlayFile() {
   return window['go']['main']['App']['SelectAndPlayFile']();
+}
+
+export function SetSpeed(arg1) {
+  return window['go']['main']['App']['SetSpeed'](arg1);
 }
 
 export function SetVolume(arg1) {

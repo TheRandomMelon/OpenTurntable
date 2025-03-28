@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { GetDuration, GetPosition, PauseMusic, StopPlayback, SetVolume, GetFilePath, GetMetadata, IsPlaying, Seek, PlayFile } from "~/wailsjs/go/main/App";
+import { GetDuration, GetPosition, PauseMusic, StopPlayback, SetVolume, GetFilePath, GetMetadata, IsPlaying, Seek, PlayFile, SetSpeed } from "~/wailsjs/go/main/App";
 import { database } from '~/wailsjs/go/models';
 
 export enum PlaybackSourceType {
@@ -30,7 +30,8 @@ export const usePlaybackStore = defineStore("playback", {
         queue: null as database.SongWithDetails[] | null,
         unshuffledQueue: null as database.SongWithDetails[] | null,
         repeat: RepeatType.Off as RepeatType,
-        shuffle: false as boolean
+        shuffle: false as boolean,
+        speed: 1 as number,
     }),
     actions: {
         async beginPlayback(song: database.SongWithDetails, source: PlaybackSourceType) {
@@ -70,7 +71,7 @@ export const usePlaybackStore = defineStore("playback", {
         },
 
         async playFile(song: database.SongWithDetails) {
-            await PlayFile(song.Path);
+            await PlayFile(song.Path, this.speed);
             this.currentSong = song;
             this.position = await GetPosition();
             this.duration = await GetDuration();
@@ -216,6 +217,14 @@ export const usePlaybackStore = defineStore("playback", {
                     this.queue = songs.getQueue<database.SongWithDetails>(this.queue, this.currentSong.ID, true);
                     console.log(this.queue);
                 }
+            }
+        },
+
+        async setSpeed(speed: number) {
+            this.speed = speed;
+
+            if (this.currentSong) {
+                await SetSpeed(speed);
             }
         },
 
