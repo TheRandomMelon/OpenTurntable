@@ -26,6 +26,8 @@ export function PauseMusic():Promise<void>;
 
 export function PlayFile(arg1:string,arg2:number):Promise<void>;
 
+export function RecallBackupVariables():Promise<Record<string, any>>;
+
 export function Seek(arg1:number):Promise<void>;
 
 export function SelectAndPlayFile():Promise<void>;

@@ -15,9 +15,10 @@ import (
 )
 
 type App struct {
-	ctx    context.Context
-	player *playback.Player
-	db     *database.DB
+	ctx             context.Context
+	player          *playback.Player
+	db              *database.DB
+	queueVarsBackup map[string]interface{}
 }
 
 func NewApp() *App {
@@ -46,6 +47,20 @@ func (a *App) startup(ctx context.Context) {
 	for _, song := range songs {
 		fmt.Printf("%d: %s (%s)\n", song.ID, song.Path, song.Title)
 	}
+
+	// Set up event for listening for new variables
+	runtime.EventsOn(ctx, "updateBackupVariables", func(data ...interface{}) {
+		if len(data) > 0 {
+			obj, ok := data[0].(map[string]interface{})
+			if ok {
+				a.queueVarsBackup = obj
+			} else {
+				fmt.Println("Failed to cast event data")
+			}
+		} else {
+			fmt.Println("Received event from frontend with no data")
+		}
+	})
 }
 
 // Called after front-end resources have been loaded
@@ -64,6 +79,10 @@ func (a *App) beforeClose(ctx context.Context) (prevent bool) {
 func (a *App) shutdown(ctx context.Context) {
 	// Close database
 	a.db.Close()
+}
+
+func (a *App) RecallBackupVariables() map[string]interface{} {
+	return a.queueVarsBackup
 }
 
 /// =================

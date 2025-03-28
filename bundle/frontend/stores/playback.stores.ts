@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { GetDuration, GetPosition, PauseMusic, StopPlayback, SetVolume, GetFilePath, GetMetadata, IsPlaying, Seek, PlayFile, SetSpeed } from "~/wailsjs/go/main/App";
+import { GetDuration, GetPosition, PauseMusic, StopPlayback, SetVolume, GetFilePath, GetMetadata, IsPlaying, Seek, PlayFile, SetSpeed, RecallBackupVariables } from "~/wailsjs/go/main/App";
 import { database } from '~/wailsjs/go/models';
 
 export enum PlaybackSourceType {
@@ -49,12 +49,20 @@ export const usePlaybackStore = defineStore("playback", {
                         // Get new queue
                         this.queue = songs.getQueue<database.SongWithDetails>(songs.songs ? songs.songs : [], pos ? pos : song.ID, false);
                         this.unshuffledQueue = this.queue;
+                        this.currentSong = song;
 
                         if (this.shuffle) {
                             this.queue = songs.getQueue<database.SongWithDetails>(songs.songs ? songs.songs : [], pos ? pos : song.ID, true);
                         }
 
                         console.log(this.queue);
+
+                        // Helps restore state in case of a reload, mostly in dev
+                        EventsEmit('updateBackupVariables', {
+                            queue: this.queue,
+                            unshuffledQueue: this.unshuffledQueue,
+                            currentSong: this.currentSong
+                        })
 
                         // Begin playback of file
                         await this.playFile(song);
@@ -122,6 +130,30 @@ export const usePlaybackStore = defineStore("playback", {
             }
         },
 
+        async getNextInQueue() {
+            let currentPos, newPos, nextSong = null;
+
+            if (this.queue) {
+                currentPos = this.queue.findIndex((s) => s.ID === this.currentSong?.ID);
+                newPos = currentPos ? currentPos + 1 : 1;
+    
+                if (this.repeat === RepeatType.RepeatOne) {
+                    nextSong = this.queue[currentPos];
+                } else {
+                    nextSong = this.queue[newPos];
+                }
+    
+                if (!nextSong && this.repeat !== RepeatType.Repeat) {
+                    nextSong = null;
+                } else if (!nextSong && this.repeat === RepeatType.Repeat) {
+                    // Loop back to first position in queue
+                    nextSong = this.queue[0];
+                }
+            }
+
+            return nextSong;
+        },
+
         async cycleRepeat() {
             switch (this.repeat) {
                 case RepeatType.Off:
@@ -146,6 +178,15 @@ export const usePlaybackStore = defineStore("playback", {
                 this.duration = await GetDuration();
                 this.metadata = await GetMetadata();
                 this.playing = await IsPlaying();
+
+                let queueBackup = await RecallBackupVariables();
+                this.queue = queueBackup['queue'];
+                this.unshuffledQueue = queueBackup['unshuffledQueue'];
+                this.currentSong = queueBackup['currentSong'];
+                
+                console.log(this.queue);
+                console.log(this.unshuffledQueue);
+                console.log(this.currentSong);
             } catch (err) {
                 console.error("Error on reload: " + err);
             }

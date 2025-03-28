@@ -50,6 +50,10 @@ export function PlayFile(arg1, arg2) {
   return window['go']['main']['App']['PlayFile'](arg1, arg2);
 }
 
+export function RecallBackupVariables() {
+  return window['go']['main']['App']['RecallBackupVariables']();
+}
+
 export function Seek(arg1) {
   return window['go']['main']['App']['Seek'](arg1);
 }
