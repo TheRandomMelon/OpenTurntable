@@ -11,19 +11,27 @@ export default defineNuxtConfig({
       'wailsjs/runtime/**',
     ],
   },
-  modules: [
-    '@vesp/nuxt-fontawesome',
-    '@pinia/nuxt'
-  ],
-	pinia: {
-		storesDirs: ['./stores/**'],
-	},
+  modules: ['@vesp/nuxt-fontawesome', '@pinia/nuxt', '@nuxtjs/i18n'],
+  pinia: {
+      storesDirs: ['./stores/**'],
+  },
+  i18n: {
+    vueI18n: './i18n.config.ts',
+    locales: [
+      {
+        code: 'en',
+        file: 'en_US.json'
+      }
+    ],
+    defaultLocale: 'en',
+    langDir: 'lang/',
+    lazy: true
+  },
   router: {
     options: {
       hashMode: true
     }
   },
-
   vite: {
     plugins: [
       tailwindcss(),
@@ -34,15 +42,15 @@ export default defineNuxtConfig({
     icons: {
       solid: ["file-audio", "book", "circle-play", "circle-pause", "bars", "volume-xmark", "volume-off", "volume-low", "volume-high", "caret-up", "caret-down", "backward-step", "forward-step", "shuffle", "repeat", "gauge", "square-plus", "folder-plus"],
       regular: [],
-			brands: []
+            brands: []
     },
     component: 'fa',
   },
 
   app: {
-		head: {
-			charset: "utf-8",
-			viewport: "width=device-width, initial-scale=1",
+    head: {
+      charset: "utf-8",
+      viewport: "width=device-width, initial-scale=1",
     }
   }
 })

@@ -1,0 +1,35 @@
+{
+    "library": {
+        "add_song": "Add Song",
+        "import_songs": "Import Songs from Folder",
+        "no_songs": "You don't currently have any songs in your library. Import some using the buttons above.",
+        "importing_songs": "Importing songs...",
+        "currently_working": "Currently working on {currentlyWorking}",
+        "loading": "Loading library..."
+    },
+    "general": {
+        "artist": "Artist",
+        "album": "Album",
+        "title": "Title",
+        "genre": "Genre",
+        "year": "Year",
+        "comment": "Comment",
+        "composer": "Composer",
+        "file_path": "File Path",
+        "not_playing": "Not Playing",
+        "library": "Library",
+        "now_playing": "Now Playing",
+        "playlist": "Playlist | Playlists"
+    },
+    "defaults": {
+        "title": "Unknown Title",
+        "artist": "Unknown Artist",
+        "album": "Unknown Album"
+    },
+    "now_playing": {
+        "song_info": "Song Info",
+        "next_in_queue": "Next in Queue",
+        "no_more_items": "No more items in queue",
+        "not_currently": "You aren't currently playing anything."
+    }
+}

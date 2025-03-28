@@ -6,8 +6,8 @@
                 <img class="w-[64px] shadow rounded" draggable="false" :src="playback.metadata?.albumArt ? playback.metadata.albumArt : defaultArtwork" />
             </div>
             <div class="flex ml-4 flex-col flex-1 overflow-hidden mr-4">
-                <span class="font-bold truncate">{{ playback.metadata?.title ? playback.metadata.title : "Unknown Title" }}</span>
-                <span class="truncate">{{ playback.metadata?.artist ? playback.metadata.artist : "Unknown Artist" }}</span>
+                <span class="font-bold truncate">{{ playback.metadata?.title ? playback.metadata.title : $t('defaults.title') }}</span>
+                <span class="truncate">{{ playback.metadata?.artist ? playback.metadata.artist : $t('defaults.artist') }}</span>
             </div>
         </div>
         <div class="flex w-1/3 max-w-1/3 items-center" v-else>
@@ -15,7 +15,7 @@
                 <img class="w-[64px] shadow rounded" draggable="false" :src="playback.metadata?.albumArt ? playback.metadata.albumArt : defaultArtwork" />
             </div>
             <div class="flex ml-4 flex-col flex-1 overflow-hidden mr-4">
-                <span class="text-[#aaaaaa] italic">Not Playing</span>
+                <span class="text-[#aaaaaa] italic">{{ $t('general.not_playing') }}</span>
             </div>
         </div>
         

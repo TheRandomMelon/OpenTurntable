@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/i18n": "^9.4.0",
     "@pinia/nuxt": "^0.10.1",
     "@tailwindcss/vite": "^4.0.12",
     "@vesp/nuxt-fontawesome": "^1.2.1",

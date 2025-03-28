@@ -2,15 +2,15 @@
     <div class="flex items-center w-full shadow-lg space-x-2 p-2" style="background: #252525;">
 		<div @click="navigateTo('/')" :class="`flex items-center justify-center space-x-2 px-4 py-2 rounded-md cursor-pointer thing ${route.path === '/' ? 'bg-[#151515]' : ''}`">
 			<fa icon="book" size="lg"></fa>
-			<span class="font-bold">Library</span>
+			<span class="font-bold">{{ $t('general.library') }}</span>
 		</div>
 		<div @click="navigateTo('/nowplaying')" :class="`flex items-center justify-center space-x-2 px-4 py-2 rounded-md cursor-pointer thing ${route.path === '/nowplaying' ? 'bg-[#151515]' : ''}`">
 			<fa icon="circle-play" size="lg"></fa>
-			<span class="font-bold">Now Playing</span>
+			<span class="font-bold">{{ $t('general.now_playing') }}</span>
 		</div>
 		<div @click="navigateTo('/playlists')" :class="`flex items-center justify-center space-x-2 px-4 py-2 rounded-md cursor-pointer thing ${route.path === '/playlists' ? 'bg-[#151515]' : ''}`">
 			<fa icon="file-audio" size="lg"></fa>
-			<span class="font-bold">Playlists</span>
+			<span class="font-bold">{{ $t('general.playlist', 2) }}</span>
 		</div>
 		<div class="flex-grow"></div>
 		<div class="flex items-center justify-center space-x-2 px-4 py-2 rounded-md cursor-pointer thing">

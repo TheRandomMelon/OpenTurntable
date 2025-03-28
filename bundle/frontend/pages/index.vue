@@ -3,10 +3,10 @@
         <div class="p-4 h-full flex flex-col gap-4">
             <div class="flex space-x-2">
                 <button @click="songs.chooseSong" class="px-3 py-2 rounded bg-gray-800 cursor-pointer">
-                    <fa icon="square-plus" class="mr-1"></fa> Add Song
+                    <fa icon="square-plus" class="mr-1"></fa> {{ $t("library.add_song") }}
                 </button>
                 <button @click="songs.importSongsFromDirectory" class="px-3 py-2 rounded bg-gray-800 cursor-pointer">
-                    <fa icon="folder-plus" class="mr-1"></fa> Import Songs from Folder
+                    <fa icon="folder-plus" class="mr-1"></fa> {{ $t("library.import_songs") }}
                 </button>
             </div>
             <div class="flex-1 overflow-auto" v-if="!state.isLoading && songs.songs !== null && !songs.importing">
@@ -21,25 +21,25 @@
                             </th>
                             <th class="cursor-pointer" @click="rearrangeSongs(state.sortTitle ? 'title' : 'artist')">
                                 <div class="flex flex-row items-center space-x-2">
-                                    <span>{{ songs.arrangement.key === 'artist' ? 'Artist' : 'Title' }}</span>
+                                    <span>{{ songs.arrangement.key === 'artist' ? $t('general.artist') : $t('general.title')  }}</span>
                                     <SortIcon :ascending="songs.arrangement.asc" v-if="songs.arrangement.key === 'title' || songs.arrangement.key === 'artist'" />
                                 </div>
                             </th>
                             <th class="cursor-pointer" @click="rearrangeSongs('album')">
                                 <div class="flex flex-row items-center space-x-2">
-                                    <span>Album</span>
+                                    <span>{{ $t('general.album') }}</span>
                                     <SortIcon :ascending="songs.arrangement.asc" v-if="songs.arrangement.key === 'album'" />
                                 </div>
                             </th>
                             <th class="cursor-pointer" @click="rearrangeSongs('genre')">
                                 <div class="flex flex-row items-center space-x-2">
-                                    <span>Genre</span>
+                                    <span>{{ $t('general.genre') }}</span>
                                     <SortIcon :ascending="songs.arrangement.asc" v-if="songs.arrangement.key === 'genre'" />
                                 </div>
                             </th>
                             <th class="cursor-pointer" @click="rearrangeSongs('year')">
                                 <div class="flex flex-row items-center space-x-2">
-                                    <span>Year</span>
+                                    <span>{{ $t('general.year') }}</span>
                                     <SortIcon :ascending="songs.arrangement.asc" v-if="songs.arrangement.key === 'year'" />
                                 </div>
                             </th>
@@ -72,14 +72,21 @@
                 </table>
             </div>
             <div v-else-if="!state.isLoading && !songs.importing">
-                <i>You don't currently have any songs in your library.</i>
+                <i>{{ $t('library.no_songs') }}</i>
             </div>
             <div v-else-if="songs.importing">
-                <i>Importing songs...</i><br/>
-                <i>Currently working on {{ state.currentlyImporting }}</i>
+                <i>{{ $t('library.importing_songs') }}</i><br/>
+                <i>
+                    {{ 
+                        $t('library.currently_working',
+                        {
+                            currentlyWorking: state.currentlyImporting
+                        })
+                    }}
+                </i>
             </div>
             <div v-else>
-                <i>Loading library...</i>
+                <i>{{ $t('library.loading') }}</i>
             </div>
         </div>
     </div>
