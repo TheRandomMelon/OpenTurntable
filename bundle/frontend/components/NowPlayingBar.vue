@@ -53,14 +53,14 @@
                 <fa icon="gauge" class="text-[#bbb] cursor-pointer" @click="state.speedDropdown = !state.speedDropdown"></fa>
 
                 <div class="absolute bottom-full mb-2 bg-[#333] shadow-lg rounded-md p-2 w-24" v-if="state.speedDropdown">
-                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(0.25)">0.25x</div>
-                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(0.5)">0.5x</div>
-                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(0.75)">0.75x</div>
-                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(1)">1x</div>
-                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(1.25)">1.25x</div>
-                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(1.5)">1.5x</div>
-                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(1.75)">1.75x</div>
-                    <div class="cursor-pointer px-3 py-1 rounded-md hover:bg-[#444]" @click="changeSpeed(2)">2x</div>
+                    <div :class="`cursor-pointer px-3 py-1 rounded-md hover:bg-[#444] ${playback.speed === 0.25 ? 'bg-[#444]' : ''}`" @click="changeSpeed(0.25)">0.25x</div>
+                    <div :class="`cursor-pointer px-3 py-1 rounded-md hover:bg-[#444] ${playback.speed === 0.5 ? 'bg-[#444]' : ''}`" @click="changeSpeed(0.5)">0.5x</div>
+                    <div :class="`cursor-pointer px-3 py-1 rounded-md hover:bg-[#444] ${playback.speed === 0.75 ? 'bg-[#444]' : ''}`" @click="changeSpeed(0.75)">0.75x</div>
+                    <div :class="`cursor-pointer px-3 py-1 rounded-md hover:bg-[#444] ${playback.speed === 1 ? 'bg-[#444]' : ''}`" @click="changeSpeed(1)">1x</div>
+                    <div :class="`cursor-pointer px-3 py-1 rounded-md hover:bg-[#444] ${playback.speed === 1.25 ? 'bg-[#444]' : ''}`" @click="changeSpeed(1.25)">1.25x</div>
+                    <div :class="`cursor-pointer px-3 py-1 rounded-md hover:bg-[#444] ${playback.speed === 1.5 ? 'bg-[#444]' : ''}`" @click="changeSpeed(1.5)">1.5x</div>
+                    <div :class="`cursor-pointer px-3 py-1 rounded-md hover:bg-[#444] ${playback.speed === 1.75 ? 'bg-[#444]' : ''}`" @click="changeSpeed(1.75)">1.75x</div>
+                    <div :class="`cursor-pointer px-3 py-1 rounded-md hover:bg-[#444] ${playback.speed === 2 ? 'bg-[#444]' : ''}`" @click="changeSpeed(2)">2x</div>
                 </div>
             </div>
 
