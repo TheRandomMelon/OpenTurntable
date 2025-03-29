@@ -14,8 +14,8 @@
                 </div>
             </div>
             <div class="flex-grow"></div>
-            <div class="flex p-4 items-end">
-                <div class="bg-[#252525] p-4 rounded albumart-shading w-86">
+            <div class="flex p-4  overflow-y-auto max-h-[calc(100vh-140px)]">
+                <div class="bg-[#252525] p-4 rounded albumart-shading w-86 overflow-y-auto">
                     <h1 class="text-xl font-bold">{{ $t('now_playing.song_info') }}</h1>
                     <div class="flex items-center">
                         <p class="font-bold mr-2">{{ $t('general.year') }}</p>
@@ -49,7 +49,7 @@
                             <div class="w-[64px] min-w-[64px]">
                                 <img class="w-[64px] shadow rounded" draggable="false" :src="nextInQueue.AlbumArt.String ? nextInQueue.AlbumArt.String : defaultArtwork" />
                             </div>
-                            <div class="flex ml-4 flex-col flex-1 overflow-hidden mr-4">
+                            <div class="flex ml-4 flex-col flex-1 overflow-hidden mr-4 max-w-[236px]">
                                 <span class="font-bold truncate">{{ nextInQueue.Title ? nextInQueue.Title : $t('general.title') }}</span>
                                 <span class="truncate">{{ nextInQueue.ArtistName.String ? nextInQueue.ArtistName.String : $t('general.artist') }}</span>
                             </div>
@@ -59,7 +59,7 @@
                                 <img class="w-[64px] shadow rounded" draggable="false" :src="defaultArtwork" />
                             </div>
                             <div class="flex ml-4 flex-col flex-1 overflow-hidden mr-4">
-                                <span class="text-[#aaaaaa] italic">{{ $t('now_playing.no_more_items') }}</span>
+                                <span class="text-[#aaaaaa] italic truncate">{{ $t('now_playing.no_more_items') }}</span>
                             </div>
                         </div>
                     </div>
@@ -83,9 +83,20 @@
 </style>
 
 <script setup lang="ts">
+    import { ref, watchEffect } from 'vue';
+
     const playback = usePlaybackStore();
     import defaultArtwork from '@/assets/img/default_artwork.png';
 
-    const nextInQueue = await playback.getNextInQueue();
-    console.log(nextInQueue);
+    const nextInQueue = ref(await playback.getNextInQueue());
+
+    // Function to update nextInQueue
+    const updateNextInQueue = async () => {
+        nextInQueue.value = await playback.getNextInQueue();
+    };
+
+    // Watch for changes in the queue or currently playing track
+    watchEffect(() => {
+        updateNextInQueue();
+    });
 </script>
