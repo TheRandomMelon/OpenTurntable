@@ -19,7 +19,9 @@
         "not_playing": "Not Playing",
         "library": "Library",
         "now_playing": "Now Playing",
-        "playlist": "Playlist | Playlists"
+        "playlist": "Playlist | Playlists",
+        "not_specified": "Not Specified",
+        "no_comment": "No Comment"
     },
     "defaults": {
         "title": "Unknown Title",

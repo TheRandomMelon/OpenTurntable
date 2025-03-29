@@ -20,27 +20,27 @@
                     <div class="flex items-center">
                         <p class="font-bold mr-2">{{ $t('general.year') }}</p>
                         <div class="flex-grow"></div>
-                        <p class="break-all text-right max-w-56">{{ playback.metadata?.year }}</p>
+                        <p class="break-all text-right max-w-56">{{ playback.metadata?.year === '0' ? $t('general.not_specified') : playback.metadata?.year }}</p>
                     </div>
                     <div class="flex items-center">
                         <p class="font-bold mr-2">{{ $t('general.genre') }}</p>
                         <div class="flex-grow"></div>
-                        <p class="break-all text-right max-w-56">{{ playback.metadata?.genre ? playback.metadata?.genre : 'Not Specified'}}</p>
+                        <p class="break-all text-right max-w-56">{{ playback.metadata?.genre ? playback.metadata?.genre : $t('general.not_specified')}}</p>
                     </div>
                     <div class="flex items-start">
                         <p class="font-bold mr-2">{{ $t('general.comment') }}</p>
                         <div class="flex-grow"></div>
-                        <p class="break-all text-right max-w-56">{{ playback.metadata?.comment ? playback.metadata?.comment : 'No Comment'}}</p>
+                        <p class="break-all text-right max-w-56">{{ playback.metadata?.comment ? playback.metadata?.comment : $t('general.no_comment')}}</p>
                     </div>
                     <div class="flex items-start">
                         <p class="font-bold mr-2">{{ $t('general.composer') }}</p>
                         <div class="flex-grow"></div>
-                        <p class="break-all text-right max-w-56">{{ playback.metadata?.composer ? playback.metadata?.composer : 'Not Specified'}}</p>
+                        <p class="break-all text-right max-w-56">{{ playback.metadata?.composer ? playback.metadata?.composer : $t('general.not_specified')}}</p>
                     </div>
                     <div class="flex items-start">
                         <p class="font-bold mr-2">{{ $t('general.file_path') }}</p>
                         <div class="flex-grow"></div>
-                        <p class="break-all text-right max-w-56">{{ playback.filePath ? playback.filePath : 'Not Specified'}}</p>
+                        <p class="break-all text-right max-w-56">{{ playback.filePath ? playback.filePath : $t('general.not_specified')}}</p>
                     </div>
                     <hr class="border-[#aaa] mt-3 mb-2"/>
                     <h1 class="text-xl font-bold mb-2">{{ $t('now_playing.next_in_queue') }}</h1>
