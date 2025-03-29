@@ -67,7 +67,7 @@
             </div>
         </div>
     </div>
-    <div class="flex-1 overflow-hidden" v-else> 
+    <div class="flex-1 overflow-hidden p-4" v-else> 
         <h1>{{ $t('now_playing.not_currently') }}</h1>
     </div>
 </template>
