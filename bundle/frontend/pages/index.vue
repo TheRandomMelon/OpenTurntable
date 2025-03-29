@@ -1,5 +1,6 @@
 <template>
    <div class="flex-1 overflow-hidden">
+        <ImportDialog v-if="songs.importing" :currentlyImporting="state.currentlyImporting" />
         <div class="p-4 h-full flex flex-col gap-4">
             <div class="flex space-x-2">
                 <button @click="songs.chooseSong" class="px-3 py-2 rounded bg-gray-800 cursor-pointer">
@@ -74,17 +75,6 @@
             <div v-else-if="!state.isLoading && !songs.importing">
                 <i>{{ $t('library.no_songs') }}</i>
             </div>
-            <div v-else-if="songs.importing">
-                <i>{{ $t('library.importing_songs') }}</i><br/>
-                <i>
-                    {{ 
-                        $t('library.currently_working',
-                        {
-                            currentlyWorking: state.currentlyImporting
-                        })
-                    }}
-                </i>
-            </div>
             <div v-else>
                 <i>{{ $t('library.loading') }}</i>
             </div>
@@ -121,6 +111,7 @@ td:hover .id-label {
     import { EventsOn } from '~/wailsjs/runtime';
     import defaultArtwork from '@/assets/img/default_artwork.png';
     import { PlaybackSourceType } from '~/stores/playback.stores';
+    import ImportDialog from '~/components/ImportDialog.vue';
 
     const playback = usePlaybackStore();
     const songs = useSongsStore();
@@ -129,6 +120,7 @@ td:hover .id-label {
         isLoading: true,
         currentlyImporting: "",
         sortTitle: true,
+        importDialog: false
     })
 
     onMounted(async () => {

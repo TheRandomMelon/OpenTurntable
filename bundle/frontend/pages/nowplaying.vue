@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="flex-grow"></div>
-            <div class="flex p-4  overflow-y-auto max-h-[calc(100vh-140px)]">
+            <div class="flex p-4 overflow-y-auto max-h-[calc(100vh-140px)]">
                 <div class="bg-[#252525] p-4 rounded albumart-shading w-86 overflow-y-auto">
                     <h1 class="text-xl font-bold">{{ $t('now_playing.song_info') }}</h1>
                     <div class="flex items-center">

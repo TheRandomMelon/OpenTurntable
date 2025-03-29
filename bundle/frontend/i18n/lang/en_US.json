@@ -4,7 +4,7 @@
         "import_songs": "Import Songs from Folder",
         "no_songs": "You don't currently have any songs in your library. Import some using the buttons above.",
         "importing_songs": "Importing songs...",
-        "currently_working": "Currently working on {currentlyWorking}",
+        "currently_working": "Currently working on:",
         "loading": "Loading library..."
     },
     "general": {
