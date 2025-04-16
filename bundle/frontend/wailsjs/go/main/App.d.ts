@@ -4,6 +4,8 @@ import {database} from '../models';
 
 export function ChooseAndCreateSong():Promise<number>;
 
+export function CreatePlaylist(arg1:database.Playlist):Promise<number>;
+
 export function CreateSongFromFilePath(arg1:string):Promise<number>;
 
 export function GetDuration():Promise<number>;
@@ -11,6 +13,10 @@ export function GetDuration():Promise<number>;
 export function GetFilePath():Promise<string>;
 
 export function GetMetadata():Promise<Record<string, string>>;
+
+export function GetPlaylistWithSongs(arg1:number):Promise<database.PlaylistWithSongs>;
+
+export function GetPlaylists():Promise<Array<database.Playlist>>;
 
 export function GetPosition():Promise<number>;
 

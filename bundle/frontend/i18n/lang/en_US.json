@@ -21,7 +21,9 @@
         "now_playing": "Now Playing",
         "playlist": "Playlist | Playlists",
         "not_specified": "Not Specified",
-        "no_comment": "No Comment"
+        "no_comment": "No Comment",
+        "name": "Name",
+        "description": "Description"
     },
     "defaults": {
         "title": "Unknown Title",
@@ -33,5 +35,9 @@
         "next_in_queue": "Next in Queue",
         "no_more_items": "No more items in queue",
         "not_currently": "You aren't currently playing anything."
+    },
+    "playlists": {
+        "playlist": "Playlist | Playlists",
+        "new": "Create New Playlist"
     }
 }

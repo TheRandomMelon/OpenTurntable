@@ -187,6 +187,21 @@ func (a *App) GetSongsWithDetails() ([]database.SongWithDetails, error) {
 	return a.db.GetSongsWithDetails()
 }
 
+// Binding to call CreatePlaylist in db
+func (a *App) CreatePlaylist(playlist database.Playlist) (int64, error) {
+	return a.db.CreatePlaylist(playlist)
+}
+
+// Binding to call GetPlaylists in db
+func (a *App) GetPlaylists() ([]database.Playlist, error) {
+	return a.db.GetPlaylists()
+}
+
+// Binding to call GetPlaylistWithSongs in db
+func (a *App) GetPlaylistWithSongs(playlist_id int64) (*database.PlaylistWithSongs, error) {
+	return a.db.GetPlaylistWithSongs(playlist_id)
+}
+
 // Inserts all songs in directory (recursive) from user provided directory
 func (a *App) ImportSongsFromDirectory() (string, error) {
 	// Have user choose directory

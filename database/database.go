@@ -51,6 +51,42 @@ type SongWithDetails struct {
 	AlbumArt   sql.NullString
 }
 
+// Represents a playlist in the database
+type Playlist struct {
+	ID          int64
+	Name        string
+	Description string
+	Picture     string
+}
+
+// Represents a playlist entry
+type PlaylistEntry struct {
+	ID          int64
+	Playlist_ID int64
+	Song_ID     int64
+	ListOrder   int64
+}
+
+// Represents a playlist and its entries
+type PlaylistWithEntries struct {
+	Playlist Playlist
+	Entries  []PlaylistEntry
+}
+
+// Represents a playlist entry with its song data included
+type PlaylistEntryWithSong struct {
+	ID          int64
+	Playlist_ID int64
+	ListOrder   int64
+	Song        SongWithDetails
+}
+
+// Represents a playlist with entries (with songs) included
+type PlaylistWithSongs struct {
+	Playlist Playlist
+	Entries  []PlaylistEntryWithSong
+}
+
 // Gather where the database should be
 func getDatabasePath() (string, error) {
 	// Uses configuration directory. This is stored depending on OS:
@@ -367,4 +403,138 @@ func (db *DB) GetSongsWithDetails() ([]SongWithDetails, error) {
 		songs = append(songs, s)
 	}
 	return songs, nil
+}
+
+/// ===========
+///  PLAYLISTS
+/// ===========
+
+// Inserts a new playlist into the database
+func (db *DB) CreatePlaylist(playlist Playlist) (int64, error) {
+	result, err := db.conn.Exec(
+		"INSERT INTO playlists (name, description, picture) VALUES (?, ?, ?)",
+		playlist.Name, playlist.Description, playlist.Picture,
+	)
+	if err != nil {
+		return 0, fmt.Errorf("failed to create playlist: %w", err)
+	}
+
+	return result.LastInsertId()
+}
+
+// Gets all playlists
+func (db *DB) GetPlaylists() ([]Playlist, error) {
+	rows, err := db.conn.Query("SELECT * FROM playlists")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get playlists: %w", err)
+	}
+	defer rows.Close()
+
+	var playlists []Playlist
+	for rows.Next() {
+		var p Playlist
+		if err := rows.Scan(&p.ID, &p.Name, &p.Description, &p.Picture); err != nil {
+			return nil, fmt.Errorf("failed to scan playlist: %w", err)
+		}
+		playlists = append(playlists, p)
+	}
+
+	return playlists, nil
+}
+
+// Inserts a new playlist entry into the database
+func (db *DB) CreatePlaylistEntry(pe PlaylistEntry) (int64, error) {
+	result, err := db.conn.Exec(
+		"INSERT INTO playlist_entries (playlist_id, song_id, list_order) VALUES (?, ?, ?)",
+		pe.Playlist_ID, pe.Song_ID, pe.ListOrder,
+	)
+	if err != nil {
+		return 0, fmt.Errorf("failed to create playlist: %w", err)
+	}
+
+	return result.LastInsertId()
+}
+
+// Gets a playlist with all of its song entries
+func (db *DB) GetPlaylistWithSongs(playlistID int64) (*PlaylistWithSongs, error) {
+	var playlist Playlist
+
+	// Fetch playlist metadata
+	err := db.conn.QueryRow(`
+		SELECT ID, Name, Description, Picture
+		FROM Playlists
+		WHERE ID = ?`, playlistID).Scan(
+		&playlist.ID,
+		&playlist.Name,
+		&playlist.Description,
+		&playlist.Picture,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch playlist entries with detailed song info
+	rows, err := db.conn.Query(`
+		SELECT 
+			pe.ID, pe.Playlist_ID, pe.ListOrder,
+
+			s.ID, s.Path, s.Title, s.Artist_ID, s.Album_ID,
+			s.Composer, s.Comment, s.Genre, s.Year,
+
+			ar.Name AS ArtistName, ar.PFP AS ArtistPFP,
+			al.Name AS AlbumName, al.Art AS AlbumArt
+
+		FROM PlaylistEntries pe
+		JOIN Songs s ON pe.Song_ID = s.ID
+		LEFT JOIN Artists ar ON s.Artist_ID = ar.ID
+		LEFT JOIN Albums al ON s.Album_ID = al.ID
+		WHERE pe.Playlist_ID = ?
+		ORDER BY pe.ListOrder
+	`, playlistID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var entries []PlaylistEntryWithSong
+	for rows.Next() {
+		var entry PlaylistEntryWithSong
+		var song SongWithDetails
+
+		err := rows.Scan(
+			&entry.ID,
+			&entry.Playlist_ID,
+			&entry.ListOrder,
+
+			&song.ID,
+			&song.Path,
+			&song.Title,
+			&song.Artist_ID,
+			&song.Album_ID,
+			&song.Composer,
+			&song.Comment,
+			&song.Genre,
+			&song.Year,
+
+			&song.ArtistName,
+			&song.ArtistPFP,
+			&song.AlbumName,
+			&song.AlbumArt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		entry.Song = song
+		entries = append(entries, entry)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return &PlaylistWithSongs{
+		Playlist: playlist,
+		Entries:  entries,
+	}, nil
 }

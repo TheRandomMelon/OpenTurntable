@@ -6,6 +6,10 @@ export function ChooseAndCreateSong() {
   return window['go']['main']['App']['ChooseAndCreateSong']();
 }
 
+export function CreatePlaylist(arg1) {
+  return window['go']['main']['App']['CreatePlaylist'](arg1);
+}
+
 export function CreateSongFromFilePath(arg1) {
   return window['go']['main']['App']['CreateSongFromFilePath'](arg1);
 }
@@ -20,6 +24,14 @@ export function GetFilePath() {
 
 export function GetMetadata() {
   return window['go']['main']['App']['GetMetadata']();
+}
+
+export function GetPlaylistWithSongs(arg1) {
+  return window['go']['main']['App']['GetPlaylistWithSongs'](arg1);
+}
+
+export function GetPlaylists() {
+  return window['go']['main']['App']['GetPlaylists']();
 }
 
 export function GetPosition() {
